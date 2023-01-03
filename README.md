@@ -40,7 +40,7 @@ Multiple technologies and packages were used while developing this project, the 
 - Server
   - Geoserver: v2.18.2
 
-##Screenshots
+## Screenshots
 
 
 
