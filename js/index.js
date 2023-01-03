@@ -257,6 +257,24 @@ $('div.btn-group button').on('click', function(event) {
         source: vectorLayer.getSource()
         });
         map.addInteraction(interaction);
+        interaction.on('drawend', function(event) {
+            const feature = event.feature;
+            var coordinates = feature.getGeometry().getCoordinates();                 
+            const id = prompt('point id');
+            fetch('http://localhost:3000/point', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: id,
+                    lat: coordinates[1],
+                    lon: coordinates[0]
+                })
+            }).then(function(response) {
+                console.log(response)
+            }).catch(function(error) {
+                console.error(error);
+            });
+        });
         break;
         case "line":
         map.removeInteraction(interaction);
@@ -265,6 +283,25 @@ $('div.btn-group button').on('click', function(event) {
         source: vectorLayer.getSource()
         });
         map.addInteraction(interaction);
+        interaction.on('drawend', function(event) {
+            const feature = event.feature;
+            const coordinates = feature.getGeometry().getCoordinates();
+            const id = prompt('line id');
+            // Send the coordinates to the server to be saved in the database
+            fetch('http://localhost:3000/line', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: id,
+                    coord: coordinates
+                })
+            }).then(function(response) {
+                console.log(response)
+            }).catch(function(error) {
+                console.error(error);
+            });
+            console.log(coordinates) 
+        });
         break;
         case "polygon":
         map.removeInteraction(interaction);
@@ -273,6 +310,25 @@ $('div.btn-group button').on('click', function(event) {
         source: vectorLayer.getSource()
         });
         map.addInteraction(interaction);
+        interaction.on('drawend', function(event) {
+            const feature = event.feature;
+            const coordinates = feature.getGeometry().getCoordinates();
+            const id = prompt('polygon id');
+            // Send the coordinates to the server to be saved in the database
+            fetch('http://localhost:3000/polygon', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: id,
+                    coord: coordinates
+                })
+            }).then(function(response) {
+                console.log(response)
+            }).catch(function(error) {
+                console.error(error);
+            });
+            console.log(coordinates) 
+        });
         break;
         case "modify":
         interaction = new ol.interaction.Modify({
@@ -284,53 +340,122 @@ $('div.btn-group button').on('click', function(event) {
         break;
         }
        });
-       ////////////Save Geometry///////////////////////////
-       var GeometryLayer=[]
-       function download(content, fileName, contentType) {
-            var a = document.createElement("a");
-    
-            var file = new Blob([content], {type: contentType});
-    
-            a.href = URL.createObjectURL(file);
-    
-            a.download = fileName;
-    
-            a.click();
-    
+
+       function addLayer() {
+            map.removeInteraction(interaction);
+            const geom=prompt('which geometry you want to add as a layer')
+            switch(geom){
+                case "point":
+                    addPoint();
+                break;
+                case "polygon":
+                    addPolygon();
+                break;
+                case "line":
+                    addLine();
+                break;
+                
+
+            }
+            
         }
-              
-
-       $("#drawSave").click(function(){
-            var json = new ol.format.GeoJSON().writeFeatures(vectorLayer.getSource().getFeatures(), { 
+function addPoint(){
+    const id = prompt('Point id to add');
         
-            dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857'
-        
+    fetch(`http://localhost:3000/geo/points/${id}`)
+      .then(response => response.json())
+      .then(data => {
 
-            });
-            console.log(json)
-            GeometryLayer.push(json)
-            console.log(GeometryLayer);
-            
-            layerName=prompt('Give it a name')
-            if(layerName =="" || layerName==null){
-                alert("Try again")
-            }
-            else{
-                download(json,layerName+'.json', 'text/plain');
-            }
-            
-        });
-        $("#addlayer").click(function(){
-            layerName=prompt("The layer's name")
-            var newgeojson= new ol.layer.Vector({
-                title: layerName,
-                source: new ol.source.Vector({
-                    url:layerName+".json",
-                    format:new ol.format.GeoJSON()
+        const st_astext = data.geom['st_astext']
+        const match = st_astext.match(/POINT\((-?\d+\.\d+) (-?\d+\.\d+)\)/);
+        const coordinate = [match[1], match[2]];
+        console.log(match[1], match[2]);
+        const layer = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                features: [
+                new ol.Feature({
+                    geometry: new ol.geom.Point([match[1], match[2]])
+                    
                 })
-            })
-            map.addLayer(newgeojson)
-        })
+                ]
+            }),
+            projection: 'EPSG:4326' ,
+            
+            });
+            map.addLayer(layer);
+    });
+}
+function addLine(){
+    const id = prompt('line id to add');
+
+    fetch(`http://localhost:3000/geo/lines/${id}`)
+    .then(response => response.json())
+    .then(data => {
+
+      const st_astext = data.geom['st_astext']
+      
+      const match = st_astext.match(/LINESTRING\(([^)]+)\)/);
+      const coordinates = match[1].split(',').map(pair => pair.split(' ').map(Number));
+      console.log(coordinates[0][0])
+
+
+      
+      const layer = new ol.layer.Vector({
+          source: new ol.source.Vector({
+              features: [
+              new ol.Feature({
+                  geometry: new ol.geom.LineString([[coordinates[0][0], coordinates[0][1]], [coordinates[1][0], coordinates[1][1]]])
+                  
+              })
+              ]
+          }),
+          projection: 'EPSG:4326' ,
+          style: new ol.style.Style({
+              stroke: new ol.style.Stroke({
+                  color: 'blue',
+                  width: 5
+                })
+          })
+          });
+          map.addLayer(layer);
+  });
+}
+function  addPolygon(){
+    const id = prompt('polygon id to add');
+
+    fetch(`http://localhost:3000/geo/polygons/${id}`)
+    .then(response => response.json())
+    .then(data => {
+      const st_astext = data.geom['st_astext']
+      console.log(st_astext)
+      
+      const coordinatesString = st_astext.match(/\(([^)]+)\)/)[1];
+      const coordinates = coordinatesString.split(',').map(coordinateString => coordinateString.split(' ').map(Number));
+      const firstCoordinate = coordinates[0];
+      const lastCoordinate = coordinates[coordinates.length - 1];
+      coordinates[0] = lastCoordinate;
+
+      console.log(coordinates);
+
+      
+      const layer = new ol.layer.Vector({
+          source: new ol.source.Vector({
+              features: [
+              new ol.Feature({
+                  geometry: new ol.geom.Polygon([coordinates])
+                  
+              })
+              ]
+          }),
+          projection: 'EPSG:4326' ,
+          
+          });
+      map.addLayer(layer);
+  });
+    
+    
+}
+
         
         
         
@@ -410,7 +535,7 @@ function parseResponse(data) {
     var vectorSource = new ol.source.Vector({
     features: (new ol.format.GeoJSON()).readFeatures(data)
     });
-    console.log((new ol.format.GeoJSON()).readFeatures(data));
+    //console.log((new ol.format.GeoJSON()).readFeatures(data));
     var features = vectorSource.getFeatures();
     var str="";
     var district = "";
@@ -418,7 +543,7 @@ function parseResponse(data) {
     var departement = "";
     for(x in features) {
     var id = features[x].getId();
-    console.log(id);
+    //console.log(id);
     var props = features[x].getProperties();
     if(id.indexOf("adm1")>-1) district = props["ADM1_FR"];
     if(id.indexOf("adm2")>-1) region = props["ADM2_FR"];

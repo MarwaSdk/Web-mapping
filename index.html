@@ -27,8 +27,7 @@
         <button id="point" type="button" class="btn btn-success">Point</button>
         <button id="line" type="button" class="btn btn-success">Line</button>
         <button id="polygon" type="button" class="btn btn-success">Polygon</button>
-        <button id="drawSave" type="button" class="btn btn-success"><span>Save</span></button>
-        <button id="addlayer" type="button" class="btn btn-success"><span>Add layer</span></button>
+        <button id="addlayer" type="button" onclick="addLayer()" class="btn btn-success"><span>Add layer</span></button>
         <button id="modify" type="button" class="btn btn-danger">Modify</button>
         <button id="button_pos" type="button" class="btn btn-primary"onclick="zoomToMyPosition()">
             <i class="fa fa-street-view fa-lg"></i> 
@@ -40,7 +39,7 @@
         </button>
     </div>
     <div id="location" class="marker">
-        <i class="fa fa-street-view fa-lg" style="color:lawngreen"></i>
+        <i class="fa fa-street-view fa-lg" style="color:red"></i>
     </div>
     <!--déclaration de l'objet map-->
     <div id="map">
