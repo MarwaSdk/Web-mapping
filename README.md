@@ -9,7 +9,7 @@
   <h4>
     <a href="#Context">Context</a> |
     <a href="#Live-Demo">Live Demo</a> |
-    <a href="#Installation-Guide">Installation Guide</a> |
+    <a href="#Database-&-Geoserver">Database & Geoserver</a> |
     <a href="#Technologies">Technologies</a> |
    <a href="#Screenshots">Screenshots</a> |
     <a href="#Further-Readings">Further Readings</a> |
@@ -22,12 +22,15 @@
 This project consists of building a web application that displays the geographic information of the Ivory Coast and Tunisia with the ability to draw and insert geometric shapes on maps.
 ## Live Demo
 
-## Installation Guide
--Node js:
-  pip install cors
-  pip install express
-  pip install pg
-  Test the database connexion
+## Database & Geoserver
+Create CI and TUN databases using postgis extension and add the correspending layers.
+Add layers of Ci and Tun stored in postgresql to geoserver and their styles.
+Test the postgresql connexion with nodejs.
+Create Geometry Database using postgis extension.
+Create polygons Table with columns (id:integer , polygon: text or geometry).
+Create lines Table with columns (id:integer , line: text or geometry).
+Create points Table with columns (id:integer , point: text or geometry).
+
 
 
 ## Technologies
