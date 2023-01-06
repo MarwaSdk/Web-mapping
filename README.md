@@ -31,7 +31,7 @@ Multiple technologies and packages were used while developing this project, the 
   - Express: v4.18.2
   - Cors: v2.8.5
   - Pg: v8.8.0
-- Frontend
+- Frontend:
   - Vanilla js
   - Open Street Map API
   - OpenLayer
