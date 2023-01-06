@@ -36,7 +36,7 @@ Multiple technologies and packages were used while developing this project, the 
   - Open Street Map API
   - OpenLayer
 - DataBase:
-  -Postgresql: v15
+  - Postgresql: v15
 - Server:
   - Geoserver: v2.18.2
 
