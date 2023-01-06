@@ -24,10 +24,10 @@ This project consists of building a web application that displays the geographic
 
 ## Installation Guide
 -Node js:
-  -pip install cors
-  -pip install express
-  -pip install pg
-  -Test the database connexion
+  pip install cors
+  pip install express
+  pip install pg
+  Test the database connexion
 
 
 ## Technologies
