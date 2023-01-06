@@ -23,6 +23,12 @@ This project consists of building a web application that displays the geographic
 ## Live Demo
 
 ## Installation Guide
+-Node js:
+  -pip install cors
+  -pip install express
+  -pip install pg
+  -Test the database connexion
+
 
 ## Technologies
 Multiple technologies and packages were used while developing this project, the technologies are diverse and used for backend and frontend development.
