@@ -103,11 +103,9 @@ app.post('/polygon',(req,res)=>{
     }
   );
 });
-////////////////////////Get geometries from database////////////////////////////
+////////////////Add Geometries as layer//////////////////////
 app.get('/geo/points/:id', (req, res) => {
-  
   const id = req.params.id;
-  
   client.query(
     'SELECT ST_AsText(point) FROM points WHERE id = $1',
     [id],
@@ -116,7 +114,6 @@ app.get('/geo/points/:id', (req, res) => {
         console.error(error);
         res.send({ error });
       } else {
-        // Send the point geometry as a text representation to the client
         res.send({ geom: result.rows[0] });
       }
     }
@@ -144,8 +141,7 @@ app.get('/geo/lines/:id', (req, res) => {
 app.get('/geo/polygons/:id', (req, res) => {
     const id = req.params.id;
     client.query(
-      'SELECT ST_AsText(polygon) FROM polygons WHERE id = $1',
-      [id],
+      'SELECT ST_AsText(polygon) FROM polygons WHERE id = $1',[id],
       (error, result) => {
         if (error) {
           console.error(error);
@@ -156,7 +152,8 @@ app.get('/geo/polygons/:id', (req, res) => {
       }
     );
 });
-// Start the server
+
+
 app.listen(3000, function() {
     console.log('Server listening on port 3000');
 });

@@ -257,6 +257,7 @@ $('div.btn-group button').on('click', function(event) {
         source: vectorLayer.getSource()
         });
         map.addInteraction(interaction);
+        
         interaction.on('drawend', function(event) {
             const feature = event.feature;
             var coordinates = feature.getGeometry().getCoordinates();                 
