@@ -56,9 +56,9 @@ Multiple technologies and packages were used while developing this project, the 
   - Geoserver: v2.18.2
 
 ## Screenshots
-![Alt text](./imgs/1.png)
-![Alt text](./imgs/2.png)
-![Alt text](./imgs/3.png)
-![Alt text](./imgs/4.png)
+![Alt text](./capture/1.png)
+![Alt text](./capture/2.png)
+![Alt text](./capture/3.png)
+![Alt text](./capture/4.png)
 
 
