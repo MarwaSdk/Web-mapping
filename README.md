@@ -9,7 +9,7 @@
   <h4>
     <a href="#Context">Context</a> |
     <a href="#Live-Demo">Live Demo</a> |
-    <a href="#Database-&-Geoserver">Database & Geoserver</a> |
+    <a href="#DatabaseGeoserver">Database & Geoserver</a> |
     <a href="#Technologies">Technologies</a> |
    <a href="#Screenshots">Screenshots</a> |
     <a href="#Further-Readings">Further Readings</a> |
@@ -22,7 +22,7 @@
 This project consists of building a web application that displays the geographic information of the Ivory Coast and Tunisia with the ability to draw and insert geometric shapes on maps.
 ## Live Demo
 
-## Database & Geoserver
+## DatabaseGeoserver
 Create CI and TUN databases using postgis extension and add the correspending layers.
 
 Add layers of Ci and Tun stored in postgresql to geoserver and their styles.
